@@ -20,9 +20,9 @@ import java.util.List;
 public class Base {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        testMethod();
+        testMethod(5000, 20000);
     }
-    public static void testMethod() throws InterruptedException, IOException {
+    public static void testMethod(int lowerRange, int upperRange) throws InterruptedException, IOException {
         WebDriverManager.chromedriver().setup();
         WebDriver driver= new ChromeDriver();
 
@@ -32,7 +32,6 @@ public class Base {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         Actions actions  = new Actions(driver);
-//        WebElement living = driver.findElement(By.cssSelector(".topnav_itemname"));
 
         Action goToLiving = actions
                 .moveToElement(driver.findElement(By.cssSelector(".topnav_item.livingunit")))
@@ -61,14 +60,29 @@ public class Base {
 
         goToPrice.perform();
 
-//        WebElement scrollSegment = driver.findElement(By.cssSelector(".noUi-base"));
-//        int scrollSegementLength  = scrollSegment.getSize().getWidth();
+        WebElement priceRange = driver
+                .findElement(By
+                        .cssSelector(".range-slider.noUi-target.noUi-ltr.noUi-horizontal.noUi-background"));
 
-        WebElement leftScrolls = driver.findElement(By.className("noUi-handle-lower"));
-        System.out.println(leftScrolls.getLocation());
-        actions.dragAndDropBy(leftScrolls,60, 0).perform();
+        int maxPriceRange = Integer.parseInt(priceRange.getAttribute("data-max"));
+        int minPriceRange = Integer.parseInt(priceRange.getAttribute("data-min"));
+        int range = maxPriceRange - minPriceRange;
 
-        Thread.sleep(4000);
+
+        WebElement scrollSegment = driver.findElement(By.cssSelector(".noUi-base"));
+        int scrollSegementLength  = scrollSegment.getSize().getWidth();
+
+        int leftScrollDistance = (lowerRange*scrollSegementLength)/range;
+        int rightScrollDistance = (upperRange*scrollSegementLength)/range;
+
+        System.out.println(leftScrollDistance+ " "+ rightScrollDistance);
+        WebElement leftScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-lower"));
+        WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
+
+        actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
+        actions.dragAndDropBy(rightScrolls, rightScrollDistance, 0).perform();
+
+        Thread.sleep(5000);
 
          List<WebElement> products =  driver.findElements(By.cssSelector("a[class='product-title-block']"));
         List<Product> productData = new ArrayList<>();
@@ -82,7 +96,7 @@ public class Base {
 
         ExcelUtil excelUtil = new ExcelUtil();
         excelUtil.enterProductData(productData);
-        driver.close();
+//        driver.close();
     }
 
 
