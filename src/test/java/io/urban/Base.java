@@ -27,7 +27,7 @@ public class Base {
         WebDriver driver= new ChromeDriver();
 
         driver.navigate().to("https://www.urbanladder.com/");
-//        driver.manage().window().maximize();
+        driver.manage().window().maximize();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -53,22 +53,22 @@ public class Base {
                 build();
         goToPrice.perform();
         Thread.sleep(2000);
+
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector(".close-reveal-modal.hide-mobile"))));
         WebElement closePopup = driver.findElement(By.cssSelector(".close-reveal-modal.hide-mobile"));
         closePopup.click();
         Thread.sleep(1000);
 
+        goToPrice.perform();
 
-        WebElement scroll = driver.findElement(By.cssSelector("div[class = 'noUi-origin']"));
-        JavascriptExecutor je = (JavascriptExecutor) driver;
-//        je.executeScript("arguments[0].setAttribute('value', '5000')", lowerValue);
-        je.executeScript("arguments[0].style.left = '10%'", scroll);
+//        WebElement scrollSegment = driver.findElement(By.cssSelector(".noUi-base"));
+//        int scrollSegementLength  = scrollSegment.getSize().getWidth();
 
-//        je.executeScript("document.getElementByClass('noUi-origin')[0].style.left = '20%'");
-//        je.executeScript("document.getElementById('filters_price_max').value = '20000'");
+        WebElement leftScrolls = driver.findElement(By.className("noUi-handle-lower"));
+        System.out.println(leftScrolls.getLocation());
+        actions.dragAndDropBy(leftScrolls,60, 0).perform();
 
-//        je.executeScript()
-
+        Thread.sleep(4000);
 
          List<WebElement> products =  driver.findElements(By.cssSelector("a[class='product-title-block']"));
         List<Product> productData = new ArrayList<>();
@@ -82,7 +82,7 @@ public class Base {
 
         ExcelUtil excelUtil = new ExcelUtil();
         excelUtil.enterProductData(productData);
-//        driver.close();
+        driver.close();
     }
 
 

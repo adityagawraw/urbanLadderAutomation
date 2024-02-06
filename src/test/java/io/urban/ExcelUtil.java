@@ -22,15 +22,17 @@ public class ExcelUtil {
         for(int i=1;i<products.size();i++){
             Row row = sheet.createRow(i+1);
 
-            Cell productName = row.createCell(0);
+            Cell serialName = row.createCell(0);
+            serialName.setCellValue(i+1);
+            Cell productName = row.createCell(1);
             productName.setCellValue(products.get(i-1).getProductName());
-            Cell finalPrice = row.createCell(1);
+            Cell finalPrice = row.createCell(2);
             finalPrice.setCellValue(products.get(i-1).getFinalPrice());
         }
             FileOutputStream fileOut = new FileOutputStream(filePath);
             workbook.write(fileOut);
             fileOut.close();
-            System.out.println("Data saved to Excel file successfully.");
+            System.out.println("Products data saved to "+"file2.xlsx"+"Excel file successfully.");
 
     }
 }
