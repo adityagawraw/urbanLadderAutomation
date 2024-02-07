@@ -9,19 +9,21 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Base {
-
+    WebDriver driver = null;
     public static void main(String[] args) throws InterruptedException, IOException {
-        testMethod(5000, 20000, "chrome");
+       new Base().testMethod(5000, 20000, "chrome");
     }
-    public static void testMethod(int lowerRange, int upperRange, String browser)
+
+    public  void testMethod(int lowerRange, int upperRange, String browser)
             throws InterruptedException, IOException {
-        WebDriver driver = null;
 
         if(browser.equalsIgnoreCase("chrome"))
         {
@@ -42,25 +44,19 @@ public class Base {
                 .build();
                 goToLiving.perform();
 
-        wait.until(ExpectedConditions
-                .elementToBeClickable(driver
-                        .findElement(By
-                                .cssSelector("a[href^='/coffee-table?src=g_topnav_living_tables_coffee-tables']"))));
         WebElement coffeTable = driver
                 .findElement(By.cssSelector("a[href^='/coffee-table?src=g_topnav_living_tables_coffee-tables']"));
+        wait.until(ExpectedConditions.elementToBeClickable(coffeTable));
 
         coffeTable.click();
 
         Action goToPrice = actions
                 .moveToElement(driver.findElement(By.cssSelector("li[data-group='price']"))).
                 build();
-        goToPrice.perform();
-        Thread.sleep(2000);
 
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector(".close-reveal-modal.hide-mobile"))));
         WebElement closePopup = driver.findElement(By.cssSelector(".close-reveal-modal.hide-mobile"));
         closePopup.click();
-        Thread.sleep(1000);
 
         goToPrice.perform();
 
@@ -74,16 +70,23 @@ public class Base {
 
 
         WebElement scrollSegment = driver.findElement(By.cssSelector(".noUi-base"));
-        int scrollSegementLength  = scrollSegment.getSize().getWidth();
+        wait.until(ExpectedConditions.visibilityOf(scrollSegment));
 
+        int scrollSegementLength  = scrollSegment.getSize().getWidth();
         int leftScrollDistance = (lowerRange*scrollSegementLength)/range;
         int rightScrollDistance =scrollSegementLength - (upperRange*scrollSegementLength)/range;
 
         WebElement leftScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-lower"));
         WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
 
-        actions.clickAndHold(leftScrolls).moveByOffset(leftScrollDistance, 0).release().perform();
-        actions.clickAndHold(rightScrolls).moveByOffset(rightScrollDistance, 0).release().perform();
+        actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
+        actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
+
+        WebElement listOfProduct = driver.
+                findElement(By.
+                        cssSelector(".productlist.withdivider.clearfix.coffee_tables.productgrid"));
+
+        wait.until(ExpectedConditions.stalenessOf(listOfProduct));
 
         List<WebElement> products =  driver.findElements(By.cssSelector("a[class='product-title-block']"));
         List<Product> productData = new ArrayList<>();
@@ -98,9 +101,9 @@ public class Base {
 
         ExcelUtil excelUtil = new ExcelUtil();
         excelUtil.enterProductData(productData);
+
         driver.close();
     }
-
 
 
 }
