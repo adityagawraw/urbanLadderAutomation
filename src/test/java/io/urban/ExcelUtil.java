@@ -11,28 +11,34 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExcelUtil {
-    public void enterProductData(List<Product> products) throws IOException {
+    public void enterProductData(List<Product> products)  {
         String filePath = "/home/aditya/Documents/file2.xlsx";
 
-        XSSFWorkbook workbook  = new XSSFWorkbook(new FileInputStream(filePath));
-        XSSFSheet sheet = workbook.getSheet("Sheet1");
+        try{
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(filePath));
+            XSSFSheet sheet = workbook.getSheet("Sheet1");
             int rowsFilled = sheet.getPhysicalNumberOfRows();
 
-        System.out.println(products.size());
-        for(int i=1;i<products.size();i++){
-            Row row = sheet.createRow(i+1);
+            for (int i = 1; i < products.size(); i++) {
+                Row row = sheet.createRow(rowsFilled + i);
 
-            Cell serialName = row.createCell(0);
-            serialName.setCellValue(i+1);
-            Cell productName = row.createCell(1);
-            productName.setCellValue(products.get(i-1).getProductName());
-            Cell finalPrice = row.createCell(2);
-            finalPrice.setCellValue(products.get(i-1).getFinalPrice());
-        }
+                Cell serialName = row.createCell(0);
+                serialName.setCellValue(rowsFilled + i);
+
+                Cell productName = row.createCell(1);
+                productName.setCellValue(products.get(i - 1).getProductName());
+
+                Cell finalPrice = row.createCell(2);
+                finalPrice.setCellValue(products.get(i - 1).getFinalPrice());
+            }
+
             FileOutputStream fileOut = new FileOutputStream(filePath);
             workbook.write(fileOut);
             fileOut.close();
-            System.out.println("Products data saved to "+"file2.xlsx"+"Excel file successfully.");
-
+            System.out.println("Products data saved to " + "file2.xlsx" + "Excel file successfully.");
+        }
+        catch (IOException e){
+            System.out.println(e);
+        }
     }
 }
