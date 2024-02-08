@@ -1,8 +1,10 @@
 package io.urban;
 
+import io.urban.util.ExcelUtil;
+import io.urban.util.Product;
+import io.urban.util.TestListener;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
@@ -27,16 +29,16 @@ public class Base2 {
         return driver;
     }
 
-    @Parameters("browser")
     @BeforeTest()
-    public void setWebDriver(String browser){
-        if(browser.equalsIgnoreCase("chrome")){
-
-            driver = new ChromeDriver();
-        }
-        else if(browser.equalsIgnoreCase("firefox")){
-            driver = new FirefoxDriver();
-        }
+    public void setWebDriver(){
+        driver = new ChromeDriver();
+//        if(browser.equalsIgnoreCase("chrome")){
+//
+//            driver = new ChromeDriver();
+//        }
+//        else if(browser.equalsIgnoreCase("firefox")){
+//            driver = new FirefoxDriver();
+//        }
         actions = new Actions(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }

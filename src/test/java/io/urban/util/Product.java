@@ -1,4 +1,4 @@
-package io.urban;
+package io.urban.util;
 
 public class Product {
     private String productName;
