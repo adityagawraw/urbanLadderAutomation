@@ -1,9 +1,13 @@
 package io.urban;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
+import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
@@ -12,18 +16,42 @@ import java.io.IOException;
 import java.util.Date;
 
 public class TestListener implements ITestListener {
+    ExtentReports extentReports = new ExtentReports() ;
+    ExtentTest test;
     @Override
-    public void onTestFailure(ITestResult result) {
-        captureScreenshot();
+    public void onStart(ITestContext context) {
+        ExtentSparkReporter sparkReporter =
+                new ExtentSparkReporter("/home/aditya/Documents/testReports/"+new Date()+".html");
+
+        sparkReporter.config().setDocumentTitle("my Report");
+        extentReports.attachReporter(sparkReporter);
+    }
+    @Override
+    public void onTestStart(ITestResult result) {
+        test = extentReports.createTest(result.getMethod().getMethodName());
     }
 
-    private void captureScreenshot() {
-        WebDriver driver = Base2.getDriver();
-        String screenShotPath= "/home/aditya/Documents/"+new Date().toString()+".jpg";
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        test.pass(result.getMethod().getMethodName()+" passed");
+    }
+    @Override
+    public void onTestFailure(ITestResult result) {
+        test.fail(result.getThrowable().getMessage()+" failed");
+        test.addScreenCaptureFromPath(captureScreenshot());
+    }
+    @Override
+    public void onFinish(ITestContext context){
+        extentReports.flush();
+    }
 
-        TakesScreenshot takesScreenshot =(TakesScreenshot) driver;
+    private String captureScreenshot() {
+        WebDriver driver = Base2.getDriver();
+        String screenShotPath= "/home/aditya/Documents/testScreenShots/"+new Date().toString()+".jpg";
+
+        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
         File screenShot = takesScreenshot.getScreenshotAs(OutputType.FILE);
-        System.out.println("screen "+screenShot.getTotalSpace());
+        System.out.println("screen "+screenShot.getName());
 
         try{
             FileHandler.copy(screenShot, new File(screenShotPath));
@@ -32,9 +60,7 @@ public class TestListener implements ITestListener {
             System.out.println(er);
         }
 
-
-
-        driver.close();
+        return  screenShotPath;
     }
 
 }
