@@ -9,7 +9,6 @@ import org.testng.ITestResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TestListener implements ITestListener {
@@ -32,6 +31,8 @@ public class TestListener implements ITestListener {
         catch (IOException er){
             System.out.println(er);
         }
+
+
 
         driver.close();
     }

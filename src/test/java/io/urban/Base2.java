@@ -1,5 +1,8 @@
 package io.urban;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -8,6 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -19,11 +23,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Listeners(TestListener.class)
 public class Base2 {
     static WebDriver driver = null;
-    Actions actions;
-    WebDriverWait wait;
+    static Actions actions;
+    static WebDriverWait wait;
+
+    ExtentReports extentReports  = new ExtentReports();
+    ExtentSparkReporter sparkReporter =
+            new ExtentSparkReporter("/home/aditya/Documents/testReports"+new Date()+".html");
 
     public static WebDriver getDriver() {
         return driver;
@@ -34,32 +41,64 @@ public class Base2 {
         driver = new ChromeDriver();
         actions = new Actions(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        sparkReporter.config().setDocumentTitle("my Report");
+        extentReports.attachReporter(sparkReporter);
     }
+
+    @AfterTest
+    public void closeDriver(){
+        extentReports.flush();
+        driver.close();
+    }
+
 
     @Test(priority = 0)
     public void navigateToWebsite(){
         driver.navigate().to("https://www.urbanladder.com/");
         driver.manage().window().maximize();
+
+        ExtentTest test = extentReports.createTest("Navigate to website").assignAuthor("aditya");
+        test.info("captring title");
+
+        if(driver.getTitle().equalsIgnoreCase("urbanladder")){
+            test.pass(" correct title");
+        }
+        else {
+            test.fail("incoorect title");
+        }
     }
 
     @Test(priority = 1)
     public void navigateToCoffeeTableProducts(){
-            Action goToLiving = actions
+        ExtentTest test = extentReports.createTest("Navigate to website").assignAuthor("aditya");
+        Action goToLiving = actions
                     .moveToElement(driver.findElement(By.cssSelector(".topnav_item.livingunit")))
                     .build();
             goToLiving.perform();
 
             WebElement coffeTable = driver
-                    .findElement(By.cssSelector("a[href^='/coffeetable?src=g_topnav_living_tables_coffee-tables']"));
+                    .findElement(By.cssSelector("a[href^='/coffee-table?src=g_topnav_living_tables_coffee-tables']"));
+
             wait.until(ExpectedConditions.elementToBeClickable(coffeTable));
 
-            coffeTable.click();
-
+            test.info(" clicking on coffee table option");
+             try {
+                 coffeTable.click();
+                 test.pass("Successfully clicked on coffee table option");
+             }
+             catch (Exception e){
+                 test.fail("Was unable to successfully clicked on coffee table option with error : "
+                         +e.getMessage());
+                 test.addScreenCaptureFromPath(captureScreenShot(driver), "Unable to clicking coffee button");
+             }
         }
     @Test(priority = 2)
     public void setProductPriceRange(){
         int lowerRange = 5000;
         int upperRange = 20000;
+
+        ExtentTest test = extentReports.createTest("Set price range").assignAuthor("aditya");
+
         Action goToPrice = actions
                 .moveToElement(driver.findElement(By.cssSelector("li[data-group='price']"))).
                 build();
@@ -87,11 +126,20 @@ public class Base2 {
         int leftScrollDistance = (lowerRange * scrollSegementLength) / range;
         int rightScrollDistance = scrollSegementLength - (upperRange * scrollSegementLength) / range;
 
-        WebElement leftScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-lower"));
-        WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
 
-        actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
-        actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
+
+        test.info("Check if price range selected via scroll ");
+        try {
+            WebElement leftScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-lower"));
+            WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
+            actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
+            actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
+            test.pass("price rnage selected");
+        }
+        catch (Exception e){
+            test.fail("could not set price range");
+            test.addScreenCaptureFromPath(captureScreenShot(driver));
+        }
 
     }
 
@@ -116,7 +164,24 @@ public class Base2 {
 
         ExcelUtil excelUtil = new ExcelUtil();
         excelUtil.enterProductData(productData);
-
-        driver.close();
     }
+
+    public static String  captureScreenShot(WebDriver driver){
+        String screenShotPath= "/home/aditya/Documents/testScreenShots"+new Date().toString()+".jpg";
+
+        TakesScreenshot takesScreenshot =(TakesScreenshot) driver;
+        File screenShot = takesScreenshot.getScreenshotAs(OutputType.FILE);
+        System.out.println("screen "+screenShot.getTotalSpace());
+
+        try{
+            FileHandler.copy(screenShot, new File(screenShotPath));
+        }
+        catch (IOException er){
+            System.out.println(er);
+        }
+
+        return  screenShotPath;
+    }
+
+
 }
