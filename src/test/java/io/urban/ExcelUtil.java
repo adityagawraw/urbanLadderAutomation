@@ -42,6 +42,7 @@ public class ExcelUtil {
             workbook.write(fileOut);
             fileOut.close();
             System.out.println("Products data saved to " + fileName+ "Excel file successfully.");
+//            workbook.close();
         }
         catch (IOException e){
             System.out.println(e);

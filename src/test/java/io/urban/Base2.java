@@ -17,11 +17,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Base {
+public class Base2 {
     WebDriver driver = null;
     public static void main(String[] args) throws InterruptedException, IOException {
-       new Base().testMethod(5000, 20000, "chrome");
+        new Base().testMethod(5000, 20000, "chrome");
     }
+
+
 
     public  void testMethod(int lowerRange, int upperRange, String browser)
             throws InterruptedException, IOException {
@@ -107,7 +109,7 @@ public class Base {
             driver.close();
         }
         catch (Exception e){
-           String screenShotPath= "/home/aditya/Documents/"+new Date().toString()+".jpg";
+            String screenShotPath= "/home/aditya/Documents/"+new Date().toString()+".jpg";
             TakesScreenshot takesScreenshot =(TakesScreenshot) driver;
             File screenShot = takesScreenshot.getScreenshotAs(OutputType.FILE);
             System.out.println("screen "+screenShot.getTotalSpace());
@@ -120,6 +122,4 @@ public class Base {
             driver.close();
         }
     }
-
-
 }
