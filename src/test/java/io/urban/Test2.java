@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners(EventListener.class)
-public class Base2 {
+public class Test2 {
     static WebDriver driver = null;
     static Actions actions;
     static WebDriverWait wait;
