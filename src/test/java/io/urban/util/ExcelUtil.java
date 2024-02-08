@@ -12,8 +12,8 @@ import java.util.List;
 
 public class ExcelUtil {
     public void enterProductData(List<Product> products)  {
-        String fileName = new Date().toString()+".xlsx";
-        String filePath = "/home/aditya/Documents/"+new Date().toString()+".xlsx";
+
+        String filePath =new Date().toString()+".xlsx";
 
         try{
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -40,7 +40,7 @@ public class ExcelUtil {
             FileOutputStream fileOut = new FileOutputStream(filePath);
             workbook.write(fileOut);
             fileOut.close();
-            System.out.println("Products data saved to " + fileName+ "Excel file successfully.");
+            System.out.println("Products data saved to " + filePath+ "Excel file successfully.");
 //            workbook.close();
         }
         catch (IOException e){

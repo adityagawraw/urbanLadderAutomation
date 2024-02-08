@@ -22,7 +22,7 @@ public class EventListener implements ITestListener {
     @Override
     public void onStart(ITestContext context) {
         ExtentSparkReporter sparkReporter =
-                new ExtentSparkReporter("/home/aditya/Documents/testReports/"+new Date()+".html");
+                new ExtentSparkReporter(new Date()+".html");
 
         sparkReporter.config().setDocumentTitle("my Report");
         extentReports.attachReporter(sparkReporter);
@@ -48,7 +48,7 @@ public class EventListener implements ITestListener {
 
     private String captureScreenshot() {
         WebDriver driver = Test2.getDriver();
-        String screenShotPath= "/home/aditya/Documents/testScreenShots/"+new Date().toString()+".jpg";
+        String screenShotPath= new Date().toString()+".jpg";
 
         TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
         File screenShot = takesScreenshot.getScreenshotAs(OutputType.FILE);
