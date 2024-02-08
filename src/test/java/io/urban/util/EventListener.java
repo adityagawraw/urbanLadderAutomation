@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-public class TestListener implements ITestListener {
+public class EventListener implements ITestListener {
     ExtentReports extentReports = new ExtentReports() ;
     ExtentTest test;
     @Override

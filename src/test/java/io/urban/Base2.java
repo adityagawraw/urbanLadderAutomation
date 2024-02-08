@@ -2,7 +2,7 @@ package io.urban;
 
 import io.urban.util.ExcelUtil;
 import io.urban.util.Product;
-import io.urban.util.TestListener;
+import io.urban.util.EventListener;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Listeners(TestListener.class)
+@Listeners(EventListener.class)
 public class Base2 {
     static WebDriver driver = null;
     static Actions actions;
