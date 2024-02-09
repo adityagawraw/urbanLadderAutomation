@@ -1,6 +1,5 @@
 package io.urban;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.urban.util.ExcelUtil;
 import io.urban.util.Product;
 import io.urban.util.EventListener;
@@ -33,12 +32,12 @@ public class Test2 {
 
     @BeforeTest()
     public void setWebDriver(){
-//        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--remote-allow-origins=*");
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
 //        options.addArguments("--no-sandbox");
-//        options.addArguments("--disable-dev-shm-usage");
-//        options.addArguments("--headless");
-        driver = new ChromeDriver();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
 //        if(browser.equalsIgnoreCase("chrome")){
 //
 //            driver = new ChromeDriver();
@@ -47,7 +46,7 @@ public class Test2 {
 //            driver = new FirefoxDriver();
 //        }
         actions = new Actions(driver);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterTest
@@ -111,6 +110,9 @@ public class Test2 {
         WebElement leftScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-lower"));
         WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
         actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
+
+        goToPrice.perform();
+        wait.until(ExpectedConditions.visibilityOf(scrollSegment));
         actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
     }
 
