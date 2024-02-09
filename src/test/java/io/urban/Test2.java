@@ -33,11 +33,11 @@ public class Test2 {
 
     @BeforeTest()
     public void setWebDriver(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--headless");
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--remote-allow-origins=*");
+//        options.addArguments("--no-sandbox");
+//        options.addArguments("--disable-dev-shm-usage");
+//        options.addArguments("--headless");
         driver = new ChromeDriver();
 //        if(browser.equalsIgnoreCase("chrome")){
 //
