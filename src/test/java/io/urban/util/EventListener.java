@@ -22,7 +22,7 @@ public class EventListener implements ITestListener {
     @Override
     public void onStart(ITestContext context) {
         ExtentSparkReporter sparkReporter =
-                new ExtentSparkReporter(new Date()+".html");
+                new ExtentSparkReporter("/home/aditya/Documents/testReports/"+new Date()+".html");
 
         sparkReporter.config().setDocumentTitle("my Report");
         extentReports.attachReporter(sparkReporter);
