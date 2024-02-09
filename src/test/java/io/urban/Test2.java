@@ -33,7 +33,6 @@ public class Test2 {
 
     @BeforeTest()
     public void setWebDriver(){
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--no-sandbox");
