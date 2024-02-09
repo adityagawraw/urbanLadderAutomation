@@ -19,8 +19,11 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
+      - name: setup chrome
+      - uses: browser-actions/setup-chrome@latest
+        run: run chrome --version
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B clean test
 
 
     

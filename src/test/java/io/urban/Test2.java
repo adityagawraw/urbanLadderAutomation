@@ -5,6 +5,7 @@ import io.urban.util.Product;
 import io.urban.util.EventListener;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
@@ -31,6 +32,10 @@ public class Test2 {
 
     @BeforeTest()
     public void setWebDriver(){
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--headless");
         driver = new ChromeDriver();
 //        if(browser.equalsIgnoreCase("chrome")){
 //
