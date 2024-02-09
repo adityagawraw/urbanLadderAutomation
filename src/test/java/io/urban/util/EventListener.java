@@ -39,7 +39,7 @@ public class EventListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         test.fail(result.getThrowable().getMessage()+" failed");
-        test.addScreenCaptureFromPath(captureScreenshot());
+//        test.addScreenCaptureFromPath(captureScreenshot());
     }
     @Override
     public void onFinish(ITestContext context){

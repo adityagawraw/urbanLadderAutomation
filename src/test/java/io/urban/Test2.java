@@ -126,26 +126,8 @@ public class Test2 {
             productData.add(product);
         }
 
-        ExcelUtil excelUtil = new ExcelUtil();
-        excelUtil.enterProductData(productData);
+//        ExcelUtil excelUtil = new ExcelUtil();
+//        excelUtil.enterProductData(productData);
     }
-
-    public static String  captureScreenShot(WebDriver driver){
-        String screenShotPath= "/home/aditya/Documents/testScreenShots"+new Date().toString()+".jpg";
-
-        TakesScreenshot takesScreenshot =(TakesScreenshot) driver;
-        File screenShot = takesScreenshot.getScreenshotAs(OutputType.FILE);
-        System.out.println("screen "+screenShot.getTotalSpace());
-
-        try{
-            FileHandler.copy(screenShot, new File(screenShotPath));
-        }
-        catch (IOException er){
-            System.out.println(er);
-        }
-
-        return  screenShotPath;
-    }
-
 
 }
