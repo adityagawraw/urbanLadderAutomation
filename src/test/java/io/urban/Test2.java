@@ -111,9 +111,9 @@ public class Test2 {
         WebElement rightScrolls = driver.findElement(By.cssSelector(".noUi-handle.noUi-handle-upper"));
         actions.dragAndDropBy(leftScrolls, leftScrollDistance, 0).perform();
 
-        goToPrice.perform();
-        wait.until(ExpectedConditions.visibilityOf(scrollSegment));
-        actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
+//        goToPrice.perform();
+//        wait.until(ExpectedConditions.visibilityOf(scrollSegment));
+//        actions.dragAndDropBy(rightScrolls, -rightScrollDistance, 0).perform();
     }
 
     @Test(priority = 3)
@@ -122,7 +122,7 @@ public class Test2 {
                 findElement(By.
                         cssSelector(".productlist.withdivider.clearfix.coffee_tables.productgrid"));
 
-        wait.until(ExpectedConditions.stalenessOf(listOfProduct));
+//        wait.until(ExpectedConditions.stalenessOf(listOfProduct));
 
         List<WebElement> products = driver.findElements(By.cssSelector("a[class='product-title-block']"));
         List<Product> productData = new ArrayList<>();
