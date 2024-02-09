@@ -1,5 +1,6 @@
 package io.urban;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.urban.util.ExcelUtil;
 import io.urban.util.Product;
 import io.urban.util.EventListener;
@@ -32,7 +33,9 @@ public class Test2 {
 
     @BeforeTest()
     public void setWebDriver(){
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--headless");
